@@ -1,7 +1,9 @@
 package com.example.library.request;
 
+import com.example.library.entity.Book;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -10,9 +12,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookRequest {
 
+    private Long bookId;
     private String bookName;
     private Boolean isSingleWriter;
-    private Long writerId;
     private Double price;
     private List<Long> writerIds; // Assuming you want to handle multiple writers
     private Date firstPublishedDate;

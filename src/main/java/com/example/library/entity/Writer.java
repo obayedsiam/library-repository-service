@@ -1,9 +1,11 @@
 package com.example.library.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -20,7 +22,7 @@ public class Writer extends BaseEntity{
     @Column(name = "WRITER_NAME")
     private String writerName;
 
-    @ManyToMany(mappedBy = "writerList")
-    private Set<Book> bookList;
-
+    @JsonIgnoreProperties("writerList")
+    @ManyToMany(mappedBy = "writerList",fetch = FetchType.LAZY)
+    private List<Book> bookList;
 }

@@ -10,7 +10,7 @@ public interface BookService {
 
     Response save(BookRequest bookRequest);
 
-    Response update(Book book);
+    Response update(BookRequest bookRequest);
 
     Response delete(Long id);
 

@@ -1,4 +1,4 @@
-package com.example.library.resource;
+package com.example.library.controller;
 
 import com.example.library.entity.Book;
 import com.example.library.request.BookRequest;
@@ -8,12 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @RequestMapping("/book")
 @RestController
-public class BookResource {
+public class BookController {
 
     @Autowired
     private BookService bookService;
@@ -24,8 +22,8 @@ public class BookResource {
     }
 
     @PutMapping("/update")
-    public Response update(@RequestBody Book book) {
-        return bookService.update(book);
+    public Response update(@RequestBody BookRequest bookRequest) {
+        return bookService.update(bookRequest);
     }
 
     @DeleteMapping("/delete/{id}")

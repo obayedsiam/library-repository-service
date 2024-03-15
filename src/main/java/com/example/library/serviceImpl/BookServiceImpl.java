@@ -2,7 +2,9 @@ package com.example.library.serviceImpl;
 
 import com.example.library.entity.Book;
 import com.example.library.enums.RecordStatus;
+import com.example.library.helper.BookHelper;
 import com.example.library.repository.BookRepository;
+import com.example.library.repository.WriterRepository;
 import com.example.library.request.BookRequest;
 import com.example.library.response.Response;
 import com.example.library.service.BookService;
@@ -10,9 +12,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +26,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
+
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private WriterRepository writerRepository;
+
+    @Autowired
+    private BookHelper bookHelper;
 
     @Autowired
     private EntityManager entityManager;
@@ -38,61 +45,46 @@ public class BookServiceImpl implements BookService {
 
         Response response = new Response();
 
-        if (!isValidBookRequest(bookRequest)) {
+        if (isValidBookRequest(bookRequest)) response = bookHelper.save(bookRequest);
+        else {
             response.setSuccess(false);
             response.setMessage("Invalid input data");
-            return response;
         }
-
-        Book book = new Book();
-        BeanUtils.copyProperties(bookRequest, book);
-
-        try {
-            bookRepository.save(book);
-            response.setData(book);
-            response.setSuccess(true);
-            response.setMessage("Saved Successfully");
-
-        } catch (DataIntegrityViolationException exception) {
-            response.setSuccess(false);
-            response.setMessage(exception.getMessage());
-
-        }
-
         return response;
     }
 
     @Transactional
     @Override
-    public Response update(Book book) {
+    public Response update(BookRequest request) {
 
-        Response response = findById(book.getBookId());
+        Response response = new Response();
 
-        if (response.isSuccess() == true) {
-            bookRepository.save(book);
-            response.setSuccess(true);
-            response.setMessage("Book Updated");
-            response.setData(book);
+        Optional<Book> book = bookRepository.findById(request.getBookId());
+
+        if (book.isPresent()) bookHelper.update(request, book.get());
+
+        else {
+            response.setSuccess(false);
+            response.setMessage("Book Not Found");
         }
-
         return response;
     }
 
     @Transactional
     @Override
     public Response delete(Long id) {
+
         Response response = new Response();
+
         Optional<Book> book = bookRepository.findById(id);
+
         if (book.isPresent()) {
-            Book b = book.get();
-            b.setRecordStatus(RecordStatus.DELETED);
-            bookRepository.save(b);
-            response.setSuccess(true);
-            response.setMessage("Book Deleted");
+          response = bookHelper.delete(book.get());
         } else {
             response.setSuccess(false);
-            response.setMessage("Book Resource Not Found");
+            response.setMessage("Book resource not found");
         }
+
         return response;
     }
 
@@ -100,12 +92,12 @@ public class BookServiceImpl implements BookService {
     public Response findById(Long id) {
         Response response = new Response();
         Optional<Book> book = bookRepository.findById(id);
-        if (!book.isEmpty()) {
+        if (book.isPresent()) {
             response.setSuccess(true);
             response.setData(book.get());
         } else {
             response.setSuccess(false);
-            response.setMessage("Resource not found with id : " + id);
+            response.setMessage("Resource not found");
         }
         return response;
     }
@@ -128,16 +120,17 @@ public class BookServiceImpl implements BookService {
         criteriaQuery.orderBy(sortOrder);
 
         TypedQuery<Book> typedQuery = entityManager.createQuery(criteriaQuery);
+
         response.setData(typedQuery.getResultList());
         response.setMessage("All Book List");
         response.setSuccess(true);
+
         return response;
     }
 
     @Override
     public Response getList(Integer size, Integer page, String sortBy, String search) {
         Response response = new Response();
-
         // Create pageable object for pagination and sorting
         Pageable pageable = PageRequest.of(page, size, Sort.by("bookId").descending());
 

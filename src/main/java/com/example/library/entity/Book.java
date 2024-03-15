@@ -1,5 +1,6 @@
 package com.example.library.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,6 +32,7 @@ public class Book extends BaseEntity{
     private Double price;
 
     @ManyToMany
+    @JsonIgnoreProperties("bookList")
     @JoinTable(
             name = "BOOK_WRITER",
             joinColumns = { @JoinColumn(name = "BOOK_ID")},
