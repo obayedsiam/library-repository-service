@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "BOOK")
 @EqualsAndHashCode(callSuper = true)
-public class Book extends BaseEntity{
+public class Book extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOOK_ID")
@@ -35,9 +35,9 @@ public class Book extends BaseEntity{
     @JsonIgnoreProperties("bookList")
     @JoinTable(
             name = "BOOK_WRITER",
-            joinColumns = { @JoinColumn(name = "BOOK_ID")},
+            joinColumns = {@JoinColumn(name = "BOOK_ID")},
             inverseJoinColumns = {@JoinColumn(name = "WRITER_ID")}
-            )
+    )
     private List<Writer> writerList;
 
     @Temporal(TemporalType.DATE)

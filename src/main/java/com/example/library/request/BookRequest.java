@@ -1,9 +1,7 @@
 package com.example.library.request;
 
-import com.example.library.entity.Book;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
 import java.util.List;
