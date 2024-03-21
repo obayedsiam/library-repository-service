@@ -11,5 +11,6 @@ public class Response {
 
     private String message;
     private boolean success;
+    private int size;
     private Object data;
 }

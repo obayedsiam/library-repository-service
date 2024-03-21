@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -19,7 +21,10 @@ public class Role {
     @Column(name = "ROLE_NAME")
     private String roleName;
 
-    @JsonIgnoreProperties("roleList")
-    @ManyToMany(mappedBy = "roleList")
-    private List<User> userList;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "role")
+    private Set<UserRole> userRoles = new HashSet<>();
+
+//    @JsonIgnoreProperties("roleList")
+//    @ManyToMany(mappedBy = "roleList")
+//    private List<User> userList;
 }

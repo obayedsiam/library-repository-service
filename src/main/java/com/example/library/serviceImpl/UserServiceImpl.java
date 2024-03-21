@@ -1,18 +1,12 @@
 package com.example.library.serviceImpl;
 
 import com.example.library.entity.Book;
-import com.example.library.helper.BookHelper;
-import com.example.library.repository.BookRepository;
 import com.example.library.repository.UserRepository;
-import com.example.library.repository.WriterRepository;
 import com.example.library.request.BookRequest;
 import com.example.library.request.UserRequest;
 import com.example.library.response.Response;
-import com.example.library.service.BookService;
 import com.example.library.service.UserService;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,8 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

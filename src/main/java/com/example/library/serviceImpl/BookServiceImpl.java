@@ -1,10 +1,8 @@
 package com.example.library.serviceImpl;
 
 import com.example.library.entity.Book;
-import com.example.library.enums.RecordStatus;
 import com.example.library.helper.BookHelper;
 import com.example.library.repository.BookRepository;
-import com.example.library.repository.WriterRepository;
 import com.example.library.request.BookRequest;
 import com.example.library.response.Response;
 import com.example.library.service.BookService;
@@ -30,8 +28,8 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    @Autowired
-    private WriterRepository writerRepository;
+//    @Autowired
+//    private WriterRepository writerRepository;
 
     @Autowired
     private BookHelper bookHelper;
@@ -49,6 +47,7 @@ public class BookServiceImpl implements BookService {
         else {
             response.setSuccess(false);
             response.setMessage("Invalid input data");
+            response.setSize(0);
         }
         return response;
     }
@@ -61,11 +60,12 @@ public class BookServiceImpl implements BookService {
 
         Optional<Book> book = bookRepository.findById(request.getBookId());
 
-        if (book.isPresent()) bookHelper.update(request, book.get());
+        if (book.isPresent()) response = bookHelper.update(request, book.get());
 
         else {
             response.setSuccess(false);
             response.setMessage("Book Not Found");
+            response.setSize(0);
         }
         return response;
     }
@@ -79,7 +79,7 @@ public class BookServiceImpl implements BookService {
         Optional<Book> book = bookRepository.findById(id);
 
         if (book.isPresent()) {
-          response = bookHelper.delete(book.get());
+            response = bookHelper.delete(book.get());
         } else {
             response.setSuccess(false);
             response.setMessage("Book resource not found");
@@ -95,6 +95,7 @@ public class BookServiceImpl implements BookService {
         if (book.isPresent()) {
             response.setSuccess(true);
             response.setData(book.get());
+            response.setSize(1);
         } else {
             response.setSuccess(false);
             response.setMessage("Resource not found");
@@ -124,6 +125,7 @@ public class BookServiceImpl implements BookService {
         response.setData(typedQuery.getResultList());
         response.setMessage("All Book List");
         response.setSuccess(true);
+        response.setSize(typedQuery.getResultList().size());
 
         return response;
     }

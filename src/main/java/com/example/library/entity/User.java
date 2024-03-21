@@ -1,10 +1,13 @@
 package com.example.library.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -21,12 +24,22 @@ public class User {
     @Column(name = "PASSWORD")
     private String password;
 
-    @ManyToMany
-    @JsonIgnoreProperties()
-    @JoinTable(name = "USER_ROLE",
-            joinColumns = {@JoinColumn(name = "USER_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "ROLE_ID")}
-    )
-    private List<Role> roleList;
+    @Column(name = "PHONE")
+    private String phone;
+
+    @Column(name = "EMAIL")
+    private String email;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    @JsonIgnore
+    private Set<UserRole> userRoles = new HashSet<>();
+//
+//    @ManyToMany
+//    @JsonIgnoreProperties()
+//    @JoinTable(name = "USER_ROLE",
+//            joinColumns = {@JoinColumn(name = "USER_ID")},
+//            inverseJoinColumns = {@JoinColumn(name = "ROLE_ID")}
+//    )
+//    private List<Role> roleList;
 
 }

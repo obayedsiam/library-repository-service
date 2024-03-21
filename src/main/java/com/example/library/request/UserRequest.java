@@ -1,5 +1,7 @@
 package com.example.library.request;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -10,8 +12,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserRequest {
 
-    private Long userId;
+    private Long id;
     private String userName;
-    private List<Long> roleIds; // Assuming you want to handle multiple writers
+    private String password;
+    private String phone;
+    private String email;
 
 }

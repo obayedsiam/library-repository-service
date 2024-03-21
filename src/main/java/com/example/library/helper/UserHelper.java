@@ -1,13 +1,7 @@
 package com.example.library.helper;
 
-import com.example.library.entity.Book;
 import com.example.library.entity.User;
-import com.example.library.entity.Writer;
-import com.example.library.enums.RecordStatus;
-import com.example.library.repository.BookRepository;
 import com.example.library.repository.UserRepository;
-import com.example.library.repository.WriterRepository;
-import com.example.library.request.BookRequest;
 import com.example.library.request.UserRequest;
 import com.example.library.response.Response;
 import lombok.Data;
@@ -15,10 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Data
 @Component
@@ -28,8 +18,8 @@ public class UserHelper {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private WriterRepository writerRepository;
+//    @Autowired
+//    private WriterRepository writerRepository;
 
     @Autowired
     private Response response;
@@ -57,7 +47,7 @@ public class UserHelper {
 
     public Response update(UserRequest request, User user) {
         BeanUtils.copyProperties(request, user);
-        List<Writer> writerList = new ArrayList<>();
+//        List<Writer> writerList = new ArrayList<>();
 
 //        for (Long writerId : request.getWriterIds()) {
 //            Optional<Writer> writer = writerRepository.findById(writerId);
@@ -71,13 +61,13 @@ public class UserHelper {
         return response;
     }
 
-    public Response delete(User user){
+    public Response delete(User user) {
         User u = user;
 //        b.setRecordStatus(RecordStatus.DELETED);
 //        bookRepository.save(b);
 //        response.setSuccess(true);
 //        response.setMessage("Book Deleted");
         return response;
-        }
+    }
 
 }
