@@ -11,6 +11,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Response save(UserRequest userRequest) {
         User user = userRequest.requestToEntity();
-        userRepository.save(user);
+        user = userRepository.save(user);
         Response response = new Response();
         response.setSuccess(true);
         response.setMessage("Saved successfully");
@@ -51,10 +52,12 @@ public class UserServiceImpl implements UserService {
 
         Response response = new Response();
 
-        Optional<User> user = userRepository.findById(request.getId());
+        Optional<User> userOptional = userRepository.findById(request.getId());
 
-        if (user.isPresent()) {
-            userRepository.save(user.get());
+        if (userOptional.isPresent()) {
+            User user  = userOptional.get();
+            BeanUtils.copyProperties(request,user);
+            user = userRepository.save(user);
             response.setData(user);
             response.setMessage("User updated");
             response.setSuccess(true);

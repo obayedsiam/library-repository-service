@@ -15,6 +15,7 @@ import java.util.Set;
 public class User extends BaseEntity{
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "USER_ID")
     private Long id;
 
