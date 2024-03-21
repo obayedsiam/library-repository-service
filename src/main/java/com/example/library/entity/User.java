@@ -12,7 +12,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "USER")
-public class User {
+public class User extends BaseEntity{
 
     @Id
     @Column(name = "USER_ID")

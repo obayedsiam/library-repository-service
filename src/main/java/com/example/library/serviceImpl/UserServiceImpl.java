@@ -1,6 +1,8 @@
 package com.example.library.serviceImpl;
 
 import com.example.library.entity.Book;
+import com.example.library.entity.User;
+import com.example.library.enums.RecordStatus;
 import com.example.library.repository.UserRepository;
 import com.example.library.request.BookRequest;
 import com.example.library.request.UserRequest;
@@ -16,6 +18,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -30,14 +34,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public Response save(UserRequest userRequest) {
-
+        User user = userRequest.requestToEntity();
+        userRepository.save(user);
         Response response = new Response();
-//
-//        if (isValidBookRequest(userRequest)) response = bookHelper.save(bookRequest);
-//        else {
-//            response.setSuccess(false);
-//            response.setMessage("Invalid input data");
-//        }
+        response.setSuccess(true);
+        response.setMessage("Saved successfully");
+        response.setSize(1);
+        response.setData(user);
         return response;
     }
 
@@ -47,14 +50,18 @@ public class UserServiceImpl implements UserService {
 
         Response response = new Response();
 
-//        Optional<Book> book = userRepository.findById(request.getBookId());
-//
-//        if (book.isPresent()) bookHelper.update(request, book.get());
-//
-//        else {
-//            response.setSuccess(false);
-//            response.setMessage("Book Not Found");
-//        }
+        Optional<User> user = userRepository.findById(request.getId());
+
+        if (user.isPresent()) {
+            userRepository.save(user.get());
+            response.setData(user);
+            response.setMessage("User updated");
+            response.setSuccess(true);
+            response.setSize(1);
+        } else {
+            response.setSuccess(false);
+            response.setMessage("Book Not Found");
+        }
         return response;
     }
 
@@ -63,15 +70,16 @@ public class UserServiceImpl implements UserService {
     public Response delete(Long id) {
 
         Response response = new Response();
-//
-//        Optional<Book> book = bookRepository.findById(id);
-//
-//        if (book.isPresent()) {
-//          response = bookHelper.delete(book.get());
-//        } else {
-//            response.setSuccess(false);
-//            response.setMessage("Book resource not found");
-//        }
+
+        Optional<User> user = userRepository.findById(id);
+
+        if (user.isPresent()) {
+            user.get().setRecordStatus(RecordStatus.DELETED);
+          userRepository.save(user.get());
+        } else {
+            response.setSuccess(false);
+            response.setMessage("Book resource not found");
+        }
 
         return response;
     }
