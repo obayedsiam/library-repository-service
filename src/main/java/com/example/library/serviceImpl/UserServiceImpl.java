@@ -1,6 +1,5 @@
 package com.example.library.serviceImpl;
 
-import com.example.library.entity.Book;
 import com.example.library.entity.User;
 import com.example.library.enums.RecordStatus;
 import com.example.library.repository.UserRepository;
@@ -9,6 +8,8 @@ import com.example.library.request.UserRequest;
 import com.example.library.response.Response;
 import com.example.library.service.UserService;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -75,7 +76,7 @@ public class UserServiceImpl implements UserService {
 
         if (user.isPresent()) {
             user.get().setRecordStatus(RecordStatus.DELETED);
-          userRepository.save(user.get());
+            userRepository.save(user.get());
         } else {
             response.setSuccess(false);
             response.setMessage("Book resource not found");
@@ -87,14 +88,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Response findById(Long id) {
         Response response = new Response();
-//        Optional<Book> book = bookRepository.findById(id);
-//        if (book.isPresent()) {
-//            response.setSuccess(true);
-//            response.setData(book.get());
-//        } else {
-//            response.setSuccess(false);
-//            response.setMessage("Resource not found");
-//        }
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            response.setSuccess(true);
+            response.setData(user.get());
+        } else {
+            response.setSuccess(false);
+            response.setMessage("Resource not found");
+        }
         return response;
     }
 
@@ -103,23 +104,23 @@ public class UserServiceImpl implements UserService {
 
         Response response = new Response();
 
-//        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-//        CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
-//        Root<Book> root = criteriaQuery.from(Book.class);
-//
-//        // Apply Search Predicate
-//        Predicate searchPredicate = criteriaBuilder.like(root.get("bookName"), "%" + search + "%");
-//
-//        Order sortOrder = sortBy.equals("asc") ? criteriaBuilder.asc(root.get("bookId")) : criteriaBuilder.desc(root.get("bookId"));
-//
-//        criteriaQuery.where(searchPredicate);
-//        criteriaQuery.orderBy(sortOrder);
-//
-//        TypedQuery<Book> typedQuery = entityManager.createQuery(criteriaQuery);
-//
-//        response.setData(typedQuery.getResultList());
-//        response.setMessage("All Book List");
-//        response.setSuccess(true);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> root = criteriaQuery.from(User.class);
+
+        // Apply Search Predicate
+        Predicate searchPredicate = criteriaBuilder.like(root.get("userName"), "%" + search + "%");
+
+        Order sortOrder = sortBy.equals("asc") ? criteriaBuilder.asc(root.get("id")) : criteriaBuilder.desc(root.get("id"));
+
+        criteriaQuery.where(searchPredicate);
+        criteriaQuery.orderBy(sortOrder);
+
+        TypedQuery<User> typedQuery = entityManager.createQuery(criteriaQuery);
+
+        response.setData(typedQuery.getResultList());
+        response.setMessage("All User List");
+        response.setSuccess(true);
 
         return response;
     }
@@ -128,18 +129,17 @@ public class UserServiceImpl implements UserService {
     public Response getList(Integer size, Integer page, String sortBy, String search) {
         Response response = new Response();
         // Create pageable object for pagination and sorting
-        Pageable pageable = PageRequest.of(page, size, Sort.by("bookId").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
         // Perform search and retrieve paginated result
-        Page<Book> result;
-//
-//        if (search != null && !search.isEmpty()) {
-//            result = bookRepository.findByBookNameContainingIgnoreCase(search, pageable);
-//        } else {
-//            result = bookRepository.findAll(pageable);
-//        }
+        Page<User> result;
+        if (search != null && !search.isEmpty()) {
+            result = userRepository.findByUserNameContainingIgnoreCase(search, pageable);
+        } else {
+            result = userRepository.findAll(pageable);
+        }
 
-//        response.setData(result);
+        response.setData(result);
         response.setMessage("Data retrieved successfully");
         response.setSuccess(true);
         return response;
