@@ -31,16 +31,22 @@ public class User extends BaseEntity{
     @Column(name = "EMAIL")
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
-    @JsonIgnore
-    private Set<UserRole> userRoles = new HashSet<>();
-//
-//    @ManyToMany
-//    @JsonIgnoreProperties()
-//    @JoinTable(name = "USER_ROLE",
-//            joinColumns = {@JoinColumn(name = "USER_ID")},
-//            inverseJoinColumns = {@JoinColumn(name = "ROLE_ID")}
-//    )
-//    private List<Role> roleList;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "USER_ROLE", joinColumns = {@JoinColumn(name = "USER_ID")},
+            inverseJoinColumns = {@JoinColumn (name = "ROLE_ID")})
+    private List<Role> roleList;
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
+
 
 }

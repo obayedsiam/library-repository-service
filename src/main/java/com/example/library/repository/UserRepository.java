@@ -16,5 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT u.* FROM user u WHERE u.user_name LIKE %:search%", nativeQuery = true)
     List<User> findAll(String search);
 
+    Page<User> findByRoleList_RoleNameContainingIgnoreCase(String roleName, Pageable pageable);
+
     Page<User> findByUserNameContainingIgnoreCase(String userName, Pageable pageable);
 }

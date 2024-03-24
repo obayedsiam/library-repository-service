@@ -50,7 +50,7 @@ public class UserController {
 
     @GetMapping("/getList")
     @Operation(description = "Get paginated list of users")
-    public Response getList(@RequestParam(value = "sortBy", defaultValue = "") String sortBy,
+    public Response getList(@RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
                             @RequestParam(value = "search", defaultValue = "") String search,
                             @RequestParam(value = "page", defaultValue = "0") Integer page,
                             @RequestParam(value = "size", defaultValue = "10") Integer size) {
