@@ -1,5 +1,6 @@
 package com.example.library.controller;
 
+import com.example.library.entity.User;
 import com.example.library.request.UserRequest;
 import com.example.library.response.Response;
 import com.example.library.service.UserService;
@@ -7,7 +8,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -55,5 +59,12 @@ public class UserController {
                             @RequestParam(value = "page", defaultValue = "0") Integer page,
                             @RequestParam(value = "size", defaultValue = "10") Integer size) {
         return userService.getList(size, page, sortBy, search);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<User>> allUsers() {
+        List<User> users = userService.allUsers();
+
+        return ResponseEntity.ok(users);
     }
 }

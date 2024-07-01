@@ -1,8 +1,11 @@
 package com.example.library.service;
 
+import com.example.library.entity.User;
 import com.example.library.request.BookRequest;
 import com.example.library.request.UserRequest;
 import com.example.library.response.Response;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -13,6 +16,8 @@ public interface UserService {
     Response delete(Long id);
 
     Response findById(Long id);
+
+    List<User> allUsers();
 
     Response getAll(String search, String sortBy);
 

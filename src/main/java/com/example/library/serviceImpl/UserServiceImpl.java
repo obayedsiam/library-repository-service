@@ -127,6 +127,14 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
+    public List<User> allUsers() {
+        List<User> users = new ArrayList<>();
+
+        userRepository.findAll().forEach(users::add);
+
+        return users;
+    }
+
     @Override
     public Response getAll(String search, String sortBy) {
 

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -19,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findByRoleList_RoleNameContainingIgnoreCase(String roleName, Pageable pageable);
 
     Page<User> findByUserNameContainingIgnoreCase(String userName, Pageable pageable);
+
+    Optional<User> findByEmail(String email);
 }
