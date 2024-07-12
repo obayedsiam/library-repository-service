@@ -1,7 +1,12 @@
 package com.example.library.config;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import org.springframework.context.annotation.Bean;
@@ -9,27 +14,29 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
+@OpenAPIDefinition(
+        security = @SecurityRequirement(name = "bearerAuth")
+)
+@SecurityScheme(
+        name = "bearerAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT"
+)
 public class SwaggerConfig {
 
     @Bean
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("Library Repository System")
-                        .description("")
+                .info(new Info()
+                        .title("Library Repository System")
+                        .description("This API provides a comprehensive interface for managing the Library Repository System, including operations for books, writers, publishers, and users.")
                         .version("v0.0.1")
-                        .license(new License().name("Apache 2.0").url("http://springdoc.org")))
-                .externalDocs(new ExternalDocumentation()
-                        .description("SpringShop Wiki Documentation")
-                        .url("https://springshop.wiki.github.org/docs"));
+                        .contact(new Contact()
+                                .name("Obayed Bin Mahfuz : ")
+                                .url("www.obayedsiam.wordpress.com")
+                                .email("obayed.mahfuz@gmail.com")));
     }
-
-//    public Docket api(){
-//        return new Docket(DocumentationType.SWAGGER_2)
-//                .select()
-//                .apis(RequestHandlerSelectors.basePackage("com.example.library.controller"))
-//                .paths(PathSelectors.any())
-//                .build();
-//    }
 
 
 }

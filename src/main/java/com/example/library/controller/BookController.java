@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@RequestMapping("/book")
+@RequestMapping("v3/api/book")
 @RestController
 @Tag(name = "Book", description = "Book related API's")
 public class BookController {
