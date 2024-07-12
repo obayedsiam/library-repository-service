@@ -63,11 +63,11 @@ public class UserController {
         return userService.getList(size, page, sortBy, search);
     }
 
-    @GetMapping("/")
-    public ResponseEntity<List<User>> allUsers() {
-        List<User> users = userService.allUsers();
+    @GetMapping("/all")
+    public ResponseEntity<String> allUsers() {
+//        List<User> users = userService.allUsers();
 
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok("Hello World");
     }
 
     @GetMapping("/me")
