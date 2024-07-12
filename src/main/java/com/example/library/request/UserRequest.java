@@ -18,7 +18,7 @@ import java.util.Set;
 public class UserRequest {
 
     private Long id;
-    private String userName;
+    private String username;
     private String password;
     private String phone;
     private String email;
@@ -26,7 +26,7 @@ public class UserRequest {
 
     public User requestToEntity(){
         User user = new User();
-        user.setUserName(this.userName);
+        user.setUsername(this.username);
         user.setPassword(this.password);
         user.setPhone(this.phone);
         user.setEmail(this.email);
