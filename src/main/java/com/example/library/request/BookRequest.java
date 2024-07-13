@@ -10,9 +10,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookRequest {
 
+    private Long bookId;
     private String bookName;
     private Boolean isSingleWriter;
-    private Long writerId;
     private Double price;
     private List<Long> writerIds; // Assuming you want to handle multiple writers
     private Date firstPublishedDate;

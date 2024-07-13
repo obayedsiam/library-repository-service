@@ -1,16 +1,14 @@
 package com.example.library.service;
 
-import com.example.library.entity.Book;
-import com.example.library.request.BookRequest;
+import com.example.library.request.RoleRequest;
+import com.example.library.request.UserRequest;
 import com.example.library.response.Response;
 
-import java.util.List;
+public interface RoleService {
 
-public interface BookService {
+    Response save(RoleRequest roleRequest);
 
-    Response save(BookRequest bookRequest);
-
-    Response update(BookRequest bookRequest);
+    Response update(RoleRequest roleRequest);
 
     Response delete(Long id);
 

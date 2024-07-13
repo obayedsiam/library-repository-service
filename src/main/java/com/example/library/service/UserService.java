@@ -1,20 +1,23 @@
 package com.example.library.service;
 
-import com.example.library.entity.Book;
+import com.example.library.entity.User;
 import com.example.library.request.BookRequest;
+import com.example.library.request.UserRequest;
 import com.example.library.response.Response;
 
 import java.util.List;
 
-public interface BookService {
+public interface UserService {
 
-    Response save(BookRequest bookRequest);
+    Response save(UserRequest userRequest);
 
-    Response update(BookRequest bookRequest);
+    Response update(UserRequest userRequest);
 
     Response delete(Long id);
 
     Response findById(Long id);
+
+    List<User> allUsers();
 
     Response getAll(String search, String sortBy);
 

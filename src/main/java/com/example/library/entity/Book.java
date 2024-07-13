@@ -1,17 +1,17 @@
 package com.example.library.entity;
 
+import com.example.library.enums.Language;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
 @Table(name = "BOOK")
 @EqualsAndHashCode(callSuper = true)
-public class Book extends BaseEntity{
+public class Book extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOOK_ID")
@@ -23,20 +23,21 @@ public class Book extends BaseEntity{
     @Column(name = "IS_SINGLE_WRITER")
     private Boolean isSingleWriter;
 
-    @OneToOne
-    @JoinColumn(name = "WRITER_NAME")
-    private Writer writer;
+    @Column(name = "IS_TRANSLATION")
+    private Boolean isTranslation;
+
+    @Column(name = "LANGUAGE")
+    private Language language;
+
+//    @ManyToOne
+////    @JoinColumn(name = "WRITER_ID")
+//    private Writer writer;
 
     @Column(name = "PRICE")
     private Double price;
 
-    @ManyToMany
-    @JoinTable(
-            name = "BOOK_WRITER",
-            joinColumns = { @JoinColumn(name = "BOOK_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "WRITER_ID")}
-            )
-    private List<Writer> writerList;
+//    @Column(name = "TRANSLATOR")
+//    private Writer translator;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "FIRST_PUBLISHED_DATE")
