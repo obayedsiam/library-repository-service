@@ -26,7 +26,7 @@ public class UserRequest {
 
     public User requestToEntity(){
         User user = new User();
-        user.setUserName(this.userName);
+        user.setName(this.userName);
         user.setPassword(this.password);
         user.setPhone(this.phone);
         user.setEmail(this.email);

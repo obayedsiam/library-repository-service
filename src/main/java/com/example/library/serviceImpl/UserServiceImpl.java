@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
         User user = userRequest.requestToEntity();
 
         // Save unsaved Role entities
-        List<Role> roles = new ArrayList<>();
+        Set<Role> roles = new HashSet<>();
         for (Role role : userRequest.getRoleList()) {
             if (role.getId() == null || role.getId() == 0) {
                 // If the Role entity has no ID (i.e., it's unsaved), save it
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
             }
         }
         // Associate the fetched Role entities with the User
-        user.setRoleList(roles);
+//        user.setRoleList(roles);
 
         // Save the User entity
         user = userRepository.save(user);
@@ -175,9 +175,9 @@ public class UserServiceImpl implements UserService {
         Page<User> result;
 
         if (search != null && !search.isEmpty()) {
-            result = userRepository.findByUserNameContainingIgnoreCase(search, pageable);
+            result = userRepository.findByNameContainingIgnoreCase(search, pageable);
             if (result.isEmpty()) {
-                result = userRepository.findByRoleList_RoleNameContainingIgnoreCase(search, pageable);
+                result = userRepository.findByRoleRoleNameContainingIgnoreCase(search, pageable);
             }
         } else {
             result = userRepository.findAll(pageable);

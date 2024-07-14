@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -24,7 +25,7 @@ public class User extends BaseEntity implements UserDetails {
     private Long id;
 
     @Column(name = "USER_NAME")
-    private String userName;
+    private String name;
 
     @Column(name = "PASSWORD")
     private String password;
@@ -35,17 +36,22 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "EMAIL")
     private String email;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "USER_ROLE", joinColumns = {@JoinColumn(name = "USER_ID")},
-            inverseJoinColumns = {@JoinColumn (name = "ROLE_ID")})
-    private List<Role> roleList;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID", nullable = false)
+    private Role role;
+
+
+//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JoinTable(name = "USER_ROLE", joinColumns = {@JoinColumn(name = "USER_ID")},
+//            inverseJoinColumns = {@JoinColumn (name = "ROLE_ID")})
+//    private Set<Role> roleList;
 
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", userName='" + userName + '\'' +
+                ", userName='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
@@ -55,12 +61,14 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.getRole().toString());
+
+        return List.of(authority);
     }
 
     @Override
     public String getUsername() {
-        return this.userName;
+        return this.name;
     }
 
     @Override

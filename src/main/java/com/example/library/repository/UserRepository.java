@@ -17,11 +17,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT u.* FROM user u WHERE u.user_name LIKE %:search%", nativeQuery = true)
     List<User> findAll(String search);
 
-    Page<User> findByRoleList_RoleNameContainingIgnoreCase(String roleName, Pageable pageable);
+    Page<User> findByRoleRoleNameContainingIgnoreCase(String roleName, Pageable pageable);
 
-    Page<User> findByUserNameContainingIgnoreCase(String userName, Pageable pageable);
+    Page<User> findByNameContainingIgnoreCase(String userName, Pageable pageable);
 
     Optional<User> findByEmail(String email);
 
-    Optional<User> findByUserName(String userName);
+    Optional<User> findByName(String userName);
 }

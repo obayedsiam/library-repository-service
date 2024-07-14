@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("v3/api/user")
 @Tag(name = "User", description = "User related APIs")
 public class UserController {
     @Autowired
@@ -63,20 +63,20 @@ public class UserController {
         return userService.getList(size, page, sortBy, search);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<String> allUsers() {
-//        List<User> users = userService.allUsers();
-
-        return ResponseEntity.ok("Hello World");
-    }
-
-    @GetMapping("/me")
-    public ResponseEntity<User> authenticatedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        User currentUser = (User) authentication.getPrincipal();
-
-        return ResponseEntity.ok(currentUser);
-    }
+//    @GetMapping("/all")
+//    public ResponseEntity<String> allUsers() {
+////        List<User> users = userService.allUsers();
+//
+//        return ResponseEntity.ok("Hello World");
+//    }
+//
+//    @GetMapping("/me")
+//    public ResponseEntity<User> authenticatedUser() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//        User currentUser = (User) authentication.getPrincipal();
+//
+//        return ResponseEntity.ok(currentUser);
+//    }
 
 }
