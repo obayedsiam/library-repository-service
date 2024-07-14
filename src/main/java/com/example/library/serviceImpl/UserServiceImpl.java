@@ -1,10 +1,12 @@
 package com.example.library.serviceImpl;
 
+import com.example.library.dto.RegisterUserDto;
 import com.example.library.entity.Book;
 import com.example.library.entity.Role;
 import com.example.library.entity.User;
 import com.example.library.entity.UserRole;
 import com.example.library.enums.RecordStatus;
+import com.example.library.enums.RoleEnum;
 import com.example.library.repository.RoleRepository;
 import com.example.library.repository.UserRepository;
 import com.example.library.request.BookRequest;
@@ -18,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,15 +31,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final EntityManager entityManager;
 
-    @Autowired
-    private EntityManager entityManager;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
@@ -191,5 +192,22 @@ public class UserServiceImpl implements UserService {
 
     private boolean isValidBookRequest(BookRequest request) {
         return true;
+    }
+
+
+    public User createAdministrator(RegisterUserDto input) {
+        Optional<Role> optionalRole = roleRepository.findByRole(RoleEnum.ADMIN);
+
+        if (optionalRole.isEmpty()) {
+            return null;
+        }
+
+        var user = new User()
+                .setName(input.getFullName())
+                .setEmail(input.getEmail())
+                .setPassword(passwordEncoder.encode(input.getPassword()))
+                .setRole(optionalRole.get());
+
+        return userRepository.save(user);
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import java.util.Set;
 
 @Data
 @Entity
+@Accessors(chain = true)
 @Table(name = "USER")
 public class User extends BaseEntity implements UserDetails {
 
@@ -36,7 +38,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "EMAIL")
     private String email;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID", nullable = false)
     private Role role;
 
