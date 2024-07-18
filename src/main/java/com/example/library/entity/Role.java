@@ -26,4 +26,8 @@ public class Role extends BaseEntity {
     @Column(name = "DESCRIPTION")
     private String description;
 
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<User> users;
+
 }

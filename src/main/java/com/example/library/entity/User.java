@@ -38,7 +38,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "EMAIL")
     private String email;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID", nullable = false)
     private Role role;
 

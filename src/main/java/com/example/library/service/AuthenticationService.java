@@ -40,11 +40,11 @@ public class AuthenticationService {
     }
 
     public User signup(RegisterUserDto input) {
-        Optional<Role> optionalRole = roleRepository.findByRole(RoleEnum.USER);
-
-        if (optionalRole.isEmpty()) {
-            return null;
-        }
+        Optional<Role> optionalRole = roleRepository.findByRole(input.getRoleEnum());
+//
+//        if (optionalRole.isEmpty()) {
+//            return null;
+//        }
 
         User user = new User();
         user.setName(input.getFullName());

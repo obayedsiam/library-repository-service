@@ -6,6 +6,7 @@ import com.example.library.entity.User;
 import com.example.library.enums.RoleEnum;
 import com.example.library.repository.RoleRepository;
 import com.example.library.repository.UserRepository;
+import org.hibernate.Hibernate;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
