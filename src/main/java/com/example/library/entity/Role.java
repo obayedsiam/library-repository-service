@@ -1,5 +1,6 @@
 package com.example.library.entity;
 
+import com.example.library.enums.RoleEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -12,18 +13,21 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "ROLE")
-public class Role {
+public class Role extends BaseEntity {
 
     @Id
-    @Column(name = "ROLE_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "ROLE_NAME")
-    private String roleName;
+    @Column(name = "ROLE")
+    private RoleEnum role;
 
+    @Column(name = "DESCRIPTION")
+    private String description;
+
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
     @JsonIgnore
-    @ManyToMany(mappedBy = "roleList")
-    private List<User> userList;
+    private List<User> users;
 
 }

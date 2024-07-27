@@ -3,7 +3,6 @@ package com.example.library.entity;
 import com.example.library.enums.RecordStatus;
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.util.Date;
 
 @Data
