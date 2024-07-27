@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("v3/api/auth")
@@ -35,6 +32,12 @@ public class AuthenticationController {
         User registeredUser = authenticationService.signup(registerUserDto);
 
         return ResponseEntity.ok(registeredUser);
+    }
+
+    @GetMapping("/home")
+    @Operation(description = "Home Page")
+    public String home() {
+        return "Welcome to Library Repository System";
     }
 
     @PostMapping("/login")
