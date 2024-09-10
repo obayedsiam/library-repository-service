@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -20,13 +21,13 @@ public class BookController {
 
     @PostMapping("/save")
     @Operation(description = "Adding Book")
-    public Response save(@RequestBody BookRequest request) {
+    public ResponseEntity<Response> save(@RequestBody BookRequest request) {
         return bookService.save(request);
     }
 
     @PutMapping("/update")
     @Operation(description = "Updating Book")
-    public Response update(@RequestBody BookRequest request) {
+    public ResponseEntity<Response> update(@RequestBody BookRequest request) {
         return bookService.update(request);
     }
 

@@ -31,18 +31,21 @@ public class UserController {
 //    }
 
     @PutMapping("/update")
+    @PreAuthorize(" hasAnyRole ( 'ADMIN' , 'SUPER_ADMIN' ) ")
     @Operation(description = "Update user data")
     public Response update(@RequestBody UserRequest request) {
         return userService.update(request);
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize(" hasAnyRole ( 'ADMIN' , 'SUPER_ADMIN' ) ")
     @Operation(description = "Delete user data")
     public Response delete(@PathVariable Long id) {
         return userService.delete(id);
     }
 
     @GetMapping("/find/{id}")
+    @PreAuthorize(" hasAnyRole ( 'ADMIN' , 'SUPER_ADMIN' ) ")
     @Operation(description = "Find user by Id")
     public Response findById(@PathVariable Long id) {
         return userService.findById(id);
@@ -57,6 +60,7 @@ public class UserController {
 //    }
 
     @GetMapping("/getList")
+    @PreAuthorize(" hasAnyRole ( 'ADMIN' , 'SUPER_ADMIN' ) ")
     @Operation(description = "Get paginated list of users")
     public Response getList(@RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
                             @RequestParam(value = "search", defaultValue = "") String search,
