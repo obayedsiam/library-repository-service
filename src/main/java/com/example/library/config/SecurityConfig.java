@@ -2,6 +2,7 @@ package com.example.library.config;
 
 import com.example.library.helper.CustomOAuth2SuccessHandler;
 import com.example.library.service.CustomOAuth2UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -66,23 +67,23 @@ public class SecurityConfig {
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated()
                 )
-//                .oauth2Login(oauth2 -> oauth2
-//                        .loginPage("/oauth2/authorization/google")
-//                                .successHandler(customOAuth2SuccessHandler)
-//                        .defaultSuccessUrl("/v3/api/auth/home")
-//                        .defaultSuccessUrl("/v3/api/auth/home", true) // Redirect to /home after successful login
-//                                .defaultSuccessUrl("login_success.html", true)
-//                        .failureUrl("/login?error=true")
-//                        .userInfoEndpoint(userInfo -> userInfo
-//                                .oidcUserService(oAuth2UserService()) // Correctly use oidcUserService
-//                        )
-//                )
+
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .cors(cors -> cors.disable());
+
+                .cors(cors -> cors.disable())
+
+                .exceptionHandling()
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden");
+                })
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                });
+
 
         http.formLogin(formLogin->{
             formLogin.loginPage("/login");

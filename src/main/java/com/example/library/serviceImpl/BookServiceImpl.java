@@ -10,11 +10,13 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +41,7 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public Response save(BookRequest bookRequest) {
+    public ResponseEntity<Response> save(BookRequest bookRequest) {
 
         Response response = new Response();
 
@@ -49,12 +51,12 @@ public class BookServiceImpl implements BookService {
             response.setMessage("Invalid input data");
             response.setSize(0);
         }
-        return response;
+        return ResponseEntity.ok().body(response);
     }
 
     @Transactional
     @Override
-    public Response update(BookRequest request) {
+    public ResponseEntity<Response> update(BookRequest request) {
 
         Response response = new Response();
 
@@ -67,7 +69,7 @@ public class BookServiceImpl implements BookService {
             response.setMessage("Book Not Found");
             response.setSize(0);
         }
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     @Transactional
