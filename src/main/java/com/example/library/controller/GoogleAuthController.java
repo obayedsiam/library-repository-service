@@ -30,6 +30,23 @@ public class GoogleAuthController {
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String googleClientSecret;
 
+    @Value("${spring.security.oauth2.client.provider.google.token-uri}")
+    private String googleTokenUri;
+
+
+
+    @Value("${spring.security.oauth2.client.registration.facebook.client-id}")
+    private String facebookClientId;
+
+    @Value("${spring.security.oauth2.client.registration.facebook.redirect-uri}")
+    private String facebookRedirectUri;
+
+    @Value("${spring.security.oauth2.client.registration.facebook.client-secret}")
+    private String facebookClientSecret;
+
+    @Value("${spring.security.oauth2.client.provider.facebook.token-uri}")
+    private String facebookTokenUri;
+
     @Autowired
     JwtService jwtService;
 
@@ -62,6 +79,29 @@ public class GoogleAuthController {
         // Redirect the user to Google Sign-In
 //        return new RedirectView(googleAuthUrl);
         return ResponseEntity.ok(googleAuthUrl);
+    }
+
+    @GetMapping("/facebook-sign-in")
+//    public RedirectView googleSignIn() {
+    public ResponseEntity facebookSignIn(@RequestHeader(value = "device", required = true) String device) {
+        String state = device;
+        // Build the Google OAuth2 authorization URL
+        String facebookAuthUrl = String.format(
+                "https://www.facebook.com/v12.0/dialog/oauth?"+
+//                "https://accounts.google.com/o/oauth2/v2/auth?" +
+                        "client_id=%s&" +
+                        "redirect_uri=%s&" +
+                        "response_type=code&" +
+                        "scope=openid email public_profile&" +
+                        "state=%s",
+                facebookClientId,
+                facebookRedirectUri,
+                state
+        );
+
+        // Redirect the user to Google Sign-In
+//        return new RedirectView(googleAuthUrl);
+        return ResponseEntity.ok(facebookAuthUrl);
     }
 
     @GetMapping("/google-callback")
@@ -123,6 +163,54 @@ public class GoogleAuthController {
         // Parse the payload as JSON
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readTree(payload);
+    }
+
+
+    @GetMapping("/facebook-callback")
+    public String handleFacebookCallback(@RequestParam("code") String code, @RequestParam("state") String state) {
+
+        System.out.println(state);
+
+        try {
+            // Build the token exchange request
+//            String tokenUrl = "https://oauth2.googleapis.com/token";
+            String tokenUrl = facebookTokenUri;
+            String requestBody = String.format(
+                    "code=%s&" +
+                            "client_id=%s&" +
+                            "client_secret=%s&" +
+                            "redirect_uri=%s&" +
+                            "grant_type=authorization_code",
+                    code, facebookClientId, facebookClientSecret, facebookRedirectUri
+            );
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(tokenUrl))
+                    .header("Content-Type", "application/x-www-form-urlencoded")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            // Send the request to exchange the code for tokens
+            HttpClient client = HttpClient.newHttpClient();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            // Return the token response (ID token, access token, etc.)
+
+            String accessToken = getAccessToken(response.body());
+
+            JsonNode claims = getAllClaimsFromToken(accessToken);
+            String email = claims.get("email").asText();
+//            String emailVerified = claims.get("email_verified").asText();
+
+            System.out.println("Username : "+email);
+//            System.out.println("Verified : "+emailVerified);
+
+
+            return response.body();
+
+        } catch (Exception e) {
+            return "Error during token exchange: " + e.getMessage();
+        }
     }
 
 }
