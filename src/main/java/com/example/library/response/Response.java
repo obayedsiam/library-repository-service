@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Data
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class Response {
 
     private String message;

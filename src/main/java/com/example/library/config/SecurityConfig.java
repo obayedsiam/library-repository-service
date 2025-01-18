@@ -45,9 +45,10 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/v3/api/auth/**",
-//            "/login/oauth2/**",
-//            "/oauth2/**",
-//            "/oauth2/authorization/google"
+            "/auth/**",
+            "/login/oauth2/**",
+            "/oauth2/**",
+            "/oauth2/authorization/google"
     };
 
     public SecurityConfig(AuthenticationProvider authenticationProvider,
@@ -64,7 +65,8 @@ public class SecurityConfig {
 
         http.csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(AUTH_WHITELIST).permitAll()
+                        .requestMatchers("/**").permitAll()
+//                        .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated()
                 )
 

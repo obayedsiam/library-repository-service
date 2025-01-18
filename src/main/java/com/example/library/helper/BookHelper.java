@@ -11,6 +11,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Data
 @Component
 @RequiredArgsConstructor
@@ -24,7 +26,13 @@ public class BookHelper {
 //    private WriterRepository writerRepository;
 
     public Response save(BookRequest bookRequest) {
-        Book book = new Book();
+        Optional<Book> optionalBook = bookRepository.findById(bookRequest.getBookId());
+        Book book;
+        if (optionalBook.isEmpty()) {
+            book = new Book();
+        } else {
+            book = optionalBook.get();
+        }
         Response response = new Response();
         BeanUtils.copyProperties(bookRequest, book);
         book.setRecordStatus(RecordStatus.ACTIVE);

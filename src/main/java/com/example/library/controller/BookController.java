@@ -33,29 +33,33 @@ public class BookController {
 
     @DeleteMapping("/delete/{id}")
     @Operation(description = "Deleting Book")
-    public Response delete(@PathVariable Long id) {
-        return bookService.delete(id);
+    public ResponseEntity<Response> delete(@PathVariable Long id) {
+        Response response = bookService.delete(id);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/find/{id}")
     @Operation(description = "Finding Book")
-    public Response findById(@PathVariable Long id) {
-        return bookService.findById(id);
+    public ResponseEntity<Response> findById(@PathVariable Long id) {
+        Response response = bookService.findById(id);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/getAll")
     @Operation(description = "Getting All Book")
-    public Response getAll(@RequestParam(value = "sortBy", defaultValue = "") String sortBy,
-                           @RequestParam(value = "search", defaultValue = "") String search) {
-        return bookService.getAll(search, sortBy);
+    public ResponseEntity<Response> getAll(@RequestParam(value = "sortBy", defaultValue = "") String sortBy,
+                                           @RequestParam(value = "search", defaultValue = "") String search) {
+        Response response = bookService.getAll(search, sortBy);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/getList")
     @Operation(description = "Getting Paginated Book")
-    public Response getList(@RequestParam(value = "sortBy", defaultValue = "") String sortBy,
-                            @RequestParam(value = "search", defaultValue = "") String search,
-                            @RequestParam(value = "page", defaultValue = "0") Integer page,
-                            @RequestParam(value = "size", defaultValue = "10") Integer size) {
-        return bookService.getList(size, page, sortBy, search);
+    public ResponseEntity<Response> getList(@RequestParam(value = "sortBy", defaultValue = "") String sortBy,
+                                            @RequestParam(value = "search", defaultValue = "") String search,
+                                            @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                            @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        Response response = bookService.getList(size, page, sortBy, search);
+        return ResponseEntity.ok(response);
     }
 }
